@@ -3,15 +3,36 @@ from functools import wraps
 from flask import (abort, redirect, render_template, request, session,
                    url_for)
 from flask.ext.oauthlib.client import OAuth
+import msgpack
 import requests
 from werkzeug import security
 
 from . import app
 
+# TODO: move to a call to data.gouv API
+regions = {
+    'type': 'FeatureCollection',
+    'features': []
+}
+levels_filepath = app.config['REGIONS_FILEPATH']
+with open(levels_filepath, mode='rb') as fp:
+    unpacker = msgpack.Unpacker(fp, encoding='utf-8')
+    for zone in unpacker:
+        if zone['level'] != 'fr/region':
+            continue
+        properties = zone['keys']
+        properties['id'] = zone['_id']
+        regions['features'].append({
+            "geometry": zone['geom'],
+            "properties": properties,
+            "id": zone['_id'],
+            "type": "Feature"
+        })
+
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', regions=regions)
 
 
 def auth_required(func):

@@ -4,9 +4,61 @@
 
 {% block content %}
 <div class="row mwide twide">
-    <div class="col wide">
-
-        <p>Bienvenue sur le portail collectivités blah…</p>
-    </div>
+    <main class="col wide">
+        <ban></ban>
+    </main>
 </div>
+<script type="riot/tag" src="{{ url_for('static', filename='tags/ban.js') }}"></script>
+<script>
+    const territory = new Territory()
+    const map = L.map('map', {center: [47, 2], zoom: 5, zoomControl: false})
+    const tilelayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png').addTo(map)
+    const regions = {{ regions|tojson }}
+    const onEachFeature = (feature, layer) => {
+        layer.on('click', () => {
+            territories[feature.id] = feature
+            riot.route(`/territoire/${feature.id}`)
+        })
+    }
+    const group = L.geoJson(regions, {
+        onEachFeature: onEachFeature
+    }).addTo(map)
+    new L.PhotonBaseSearch(L.DomUtil.get('search-territory'), {
+        url: 'http://localhost:7878/search/?',
+        placeholder: 'Chercher une commune, un département, une région',
+        onSelected: (feature) => {
+            riot.route(`/territoire/${feature.id}`)
+        }
+    });
+
+    L.DomEvent.on(Z.qs('#geolocate'), 'click', () => {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                fetch(`https://geo.api.gouv.fr/communes?lat=${position.coords.latitude}&lon=${position.coords.longitude}`)
+                    .then((response) => {
+                        return response.json()
+                    }).then((json) => {
+                        const codeInsee = json[0].codeInsee
+                        const id = `fr/town/${codeInsee}`
+                        riot.route(`/territoire/${id}`)
+                    }).catch(console.error.bind(console))
+            },
+            (error) => {
+                console.log(error)
+            }
+        )
+    })
+
+    riot.route('/territoire/*/*/*', (country, level, id) => {
+        if (this.tag) this.tag.unmount()
+        territory.trigger('init', [country, level, id].join('/'))
+    })
+    riot.route('/ban/batch', () => {
+        riot.compile(() => {
+            this.tag = riot.mount('ban')[0]
+        })
+        if (this.tag) this.tag.mount()
+    })
+    riot.route.start(true)
+</script>
 {% endblock content %}

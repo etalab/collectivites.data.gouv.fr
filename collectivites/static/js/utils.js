@@ -24,6 +24,7 @@ var Z = {
     },
 
     stop: function (e) {
+        if (!e) return;
         e.stopPropagation();
         e.preventDefault();
     },
@@ -38,6 +39,27 @@ var Z = {
 
     removeClass: function (el, name) {
         el.className = ((' ' + el.className + ' ').replace(' ' + name + ' ', ' ')).trim();
+    },
+
+    alert: function (options) {
+        var ID = null;
+        var container = Z.el('div', {className: 'with-transition'}, document.body);
+        container.id = 'alert-container';
+        var levelClass = options.level || 'error';
+        Z.addClass(document.body, 'with-alert');
+        Z.addClass(container, level_class);
+        var close = function (e) {
+            Z.stop(e);
+            document.body.removeChild(container);
+            Z.removeClass(document.body, 'with-alert');
+            if (ID) window.clearTimeout(timeoutID);
+        };
+        var closeLink = Z.el('a', {className: 'close-link'}, container);
+        closeLink.href = '#';
+        closeLink.textContent = 'x Fermer';
+        closeLink.addEventListener('click', close, false);
+        Z.el('div', {}, container, options.content);
+        ID = window.setTimeout(L.bind(close, this), options.duration || 3000);
     },
 
     xhr: function (options) {

@@ -2,6 +2,8 @@
     <h2>Téléverser des adresses dans la Base adresse nationale</h2>
     <div id="batch"></div>
     <script type="text/javascript">
-        BAN.balUploader('#batch');
+        this.on('mount', () => {
+            BAN.balUploader('#batch');        
+        })
     </script>
 </ban>
