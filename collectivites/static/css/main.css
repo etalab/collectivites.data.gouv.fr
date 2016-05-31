@@ -423,31 +423,6 @@ nav .menu a:hover {
 .hidden {
     display: none;
 }
-#storage-alert-container {
-    min-height: 46px;
-    line-height: 46px;
-    padding-left: 10px;
-    width: calc(100% - 500px);
-    position: absolute;
-    top: -46px;
-    left: 250px;  /* Keep save/cancel button accessible. */
-    right: 250px;
-    box-shadow: 0 1px 7px #999999;
-    visibility: hidden;
-    background: none repeat scroll 0 0 rgba(20, 22, 23, 0.8);
-    font-weight: bold;
-    color: #fff;
-    font-size: 0.8em;
-    z-index: 1002;
-    border-radius: 2px;
-}
-#storage-alert-container.error {
-    background-color: #c60f13;
-}
-.storage-alert #storage-alert-container {
-    visibility: visible;
-    top: 23px;
-}
 
 /* ************************************************* */
 /* ********************* MAP *********************** */

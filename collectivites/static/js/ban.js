@@ -30,7 +30,7 @@ BAN.balUploader = function (selector) {
         }
     }
 
-    Z.fileUploader({container: selector, uri: '.', onSuccess: onSuccess});
+    Z.fileUploader({container: selector, uri: '/ban/batch/', onSuccess: onSuccess});
 }
 
 var groupListTmpl = '<ul>{{#each groups}}<li>{{name}}</li>{{/each}}</ul>';

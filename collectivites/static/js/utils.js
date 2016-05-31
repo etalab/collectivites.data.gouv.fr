@@ -41,27 +41,6 @@ var Z = {
         el.className = ((' ' + el.className + ' ').replace(' ' + name + ' ', ' ')).trim();
     },
 
-    alert: function (options) {
-        var ID = null;
-        var container = Z.el('div', {className: 'with-transition'}, document.body);
-        container.id = 'alert-container';
-        var levelClass = options.level || 'error';
-        Z.addClass(document.body, 'with-alert');
-        Z.addClass(container, level_class);
-        var close = function (e) {
-            Z.stop(e);
-            document.body.removeChild(container);
-            Z.removeClass(document.body, 'with-alert');
-            if (ID) window.clearTimeout(timeoutID);
-        };
-        var closeLink = Z.el('a', {className: 'close-link'}, container);
-        closeLink.href = '#';
-        closeLink.textContent = 'x Fermer';
-        closeLink.addEventListener('click', close, false);
-        Z.el('div', {}, container, options.content);
-        ID = window.setTimeout(L.bind(close, this), options.duration || 3000);
-    },
-
     xhr: function (options) {
         var xhr = new XMLHttpRequest();
         xhr.open(options.verb, options.uri, true);
@@ -189,7 +168,7 @@ Z.fileUploader = function (options) {
             fileInput.click();
         };
         browseLink.addEventListener('click', onBrowseLinkClick, false);
-    }; 
+    };
     listenBrowseLink();
     reader.addEventListener('load', onFileLoad, false);
     holder.addEventListener('dragenter', onDragEnter, false);

@@ -3,36 +3,15 @@ from functools import wraps
 from flask import (abort, redirect, render_template, request, session,
                    url_for)
 from flask.ext.oauthlib.client import OAuth
-import msgpack
 import requests
 from werkzeug import security
 
 from . import app
 
-# TODO: move to a call to data.gouv API
-regions = {
-    'type': 'FeatureCollection',
-    'features': []
-}
-levels_filepath = app.config['REGIONS_FILEPATH']
-with open(levels_filepath, mode='rb') as fp:
-    unpacker = msgpack.Unpacker(fp, encoding='utf-8')
-    for zone in unpacker:
-        if zone['level'] != 'fr/region':
-            continue
-        properties = zone['keys']
-        properties['id'] = zone['_id']
-        regions['features'].append({
-            "geometry": zone['geom'],
-            "properties": properties,
-            "id": zone['_id'],
-            "type": "Feature"
-        })
-
 
 @app.route('/')
 def index():
-    return render_template('index.html', regions=regions)
+    return render_template('index.html')
 
 
 def auth_required(func):
@@ -61,19 +40,17 @@ def with_ban_session(func):
     return wrapper
 
 
-@app.route('/ban/batch/', methods=['GET', 'POST'])
+@app.route('/ban/batch/', methods=['POST'])
 @auth_required
 @with_ban_session
 def ban_batch():
-    if request.method == 'POST':
-        token = session.get('ban_token')
-        auth = "Bearer {}".format(token)
-        url = '{base_url}/import/bal'.format(base_url=app.config['BAN_URL'])
-        resp = requests.post(url,
-                             headers={'Authorization': auth},
-                             files={'data': ('f.csv', request.files['data'])})
-        return resp.text
-    return render_template('ban/batch.html')
+    token = session.get('ban_token')
+    auth = "Bearer {}".format(token)
+    url = '{base_url}/import/bal'.format(base_url=app.config['BAN_URL'])
+    resp = requests.post(url,
+                         headers={'Authorization': auth},
+                         files={'data': ('f.csv', request.files['data'])})
+    return resp.text
 
 
 @app.route('/ban/groups')
@@ -163,5 +140,10 @@ def shared_context():
         "DESCRIPTION": "Portail des territoires pour la modernisation",
         "TWITTER": "@SGMAP",
         "API_URL": app.config['API_URL'],
-        "CONTACT_EMAIL": "collectivites@data.gouv.fr"
+        "CONTACT_EMAIL": "collectivites@data.gouv.fr",
+        "API_URLS": {
+            "UDATA": app.config['UDATA_URL'],
+            "GEOZONES": app.config['GEOZONES_URL'],
+            "GEOAPI": app.config['GEOAPI_URL'],
+        }
     }

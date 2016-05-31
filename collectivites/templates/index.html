@@ -6,25 +6,27 @@
 <div class="row mwide twide">
     <main class="col wide">
         <ban></ban>
+        <territory></territory>
     </main>
 </div>
 <script type="riot/tag" src="{{ url_for('static', filename='tags/ban.js') }}"></script>
+<script type="riot/tag" src="{{ url_for('static', filename='tags/territory.js') }}"></script>
 <script>
-    const territory = new Territory()
-    const map = L.map('map', {center: [47, 2], zoom: 5, zoomControl: false})
+    const API_URLS = {{ API_URLS|tojson }}
+    const defaultCenter = [47, 2]
+    const map = L.map('map', {center: defaultCenter, zoom: 5, zoomControl: false})
     const tilelayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png').addTo(map)
-    const regions = {{ regions|tojson }}
     const onEachFeature = (feature, layer) => {
         layer.on('click', () => {
             territories[feature.id] = feature
             riot.route(`/territoire/${feature.id}`)
         })
     }
-    const group = L.geoJson(regions, {
+    const group = L.geoJson(null, {
         onEachFeature: onEachFeature
     }).addTo(map)
     new L.PhotonBaseSearch(L.DomUtil.get('search-territory'), {
-        url: 'http://localhost:7878/search/?',
+        url: `${API_URLS.GEOZONES}?`,
         placeholder: 'Chercher une commune, un département, une région',
         onSelected: (feature) => {
             riot.route(`/territoire/${feature.id}`)
@@ -34,7 +36,7 @@
     L.DomEvent.on(Z.qs('#geolocate'), 'click', () => {
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                fetch(`https://geo.api.gouv.fr/communes?lat=${position.coords.latitude}&lon=${position.coords.longitude}`)
+                fetch(`${API_URLS.GEOAPI}communes?lat=${position.coords.latitude}&lon=${position.coords.longitude}`)
                     .then((response) => {
                         return response.json()
                     }).then((json) => {
@@ -49,16 +51,36 @@
         )
     })
 
-    riot.route('/territoire/*/*/*', (country, level, id) => {
-        if (this.tag) this.tag.unmount()
-        territory.trigger('init', [country, level, id].join('/'))
-    })
-    riot.route('/ban/batch', () => {
+    let currentTag = null
+
+    function mount(tag, options) {
+        currentTag && currentTag.unmount(true)
         riot.compile(() => {
-            this.tag = riot.mount('ban')[0]
+            currentTag = riot.mount(tag, options)[0]
         })
-        if (this.tag) this.tag.mount()
-    })
-    riot.route.start(true)
+    }
+
+    const views = {
+
+        territoire: (args) => {
+            mount('territory', {args: args})
+        },
+
+        home: function () {
+            riot.route('/territoire/country/fr')
+        },
+
+        ban: function (action) {
+            mount('ban')
+        }
+    }
+    function handler(name, ...args) {
+      var fn = views[name || 'home']
+      fn ? fn(args) : console.error('no route found : ', name, args)
+    }
+    riot.route(handler)
+
+    riot.route.start()
+    riot.route.exec()
 </script>
 {% endblock content %}

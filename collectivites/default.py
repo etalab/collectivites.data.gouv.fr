@@ -9,3 +9,6 @@ DATAGOUV_CONSUMER_SECRET = "YYYY"
 BAN_CLIENT_ID = ''
 BAN_CLIENT_SECRET = ''
 BAN_URL = 'http://localhost:5959'
+UDATA_URL = "http://localhost:7000/"
+GEOZONES_URL = "http://localhost:7878/search/"
+GEOAPI_URL = "https://geo.api.gouv.fr/"

@@ -31,7 +31,7 @@
         <script src="{{ url_for('static', filename='riot+compiler.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
         <script src="{{ url_for('static', filename='js/ban.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/territories.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/territory.js') }}"></script>
         {% block extrahead %}{% endblock %}
     </head>
     <body class="{% block body_class %}{% endblock %}">
@@ -40,7 +40,7 @@
           <!-- navigation bar -->
           <nav>
             <div>
-            <section><a href="{{ url_for('index') }}"><h1>Territoires</h1></a></section>
+            <section><a href="#"><h1>Territoires</h1></a></section>
             <h3>Chercher un territoire</h3>
             <div><input type="search" placeholder="Trouver ma commune" id="search-territory" /></div>
             <hr />

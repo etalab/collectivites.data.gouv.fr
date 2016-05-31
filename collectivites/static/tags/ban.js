@@ -3,7 +3,7 @@
     <div id="batch"></div>
     <script type="text/javascript">
         this.on('mount', () => {
-            BAN.balUploader('#batch');        
+            BAN.balUploader('#batch');
         })
     </script>
 </ban>
