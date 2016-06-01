@@ -11,20 +11,27 @@
 </div>
 <script type="riot/tag" src="{{ url_for('static', filename='tags/ban.js') }}"></script>
 <script type="riot/tag" src="{{ url_for('static', filename='tags/territory.js') }}"></script>
+<script type="riot/tag" src="{{ url_for('static', filename='tags/map-nav.js') }}"></script>
 <script>
-    const API_URLS = {{ API_URLS|tojson }}
-    const defaultCenter = [47, 2]
-    const map = L.map('map', {center: defaultCenter, zoom: 5, zoomControl: false})
-    const tilelayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png').addTo(map)
-    const onEachFeature = (feature, layer) => {
-        layer.on('click', () => {
-            territories[feature.id] = feature
-            riot.route(`/territoire/${feature.id}`)
-        })
+    const RiotControl = {
+      _stores: [],
+      addStore: function(store) {
+        this._stores.push(store)
+      }
     }
-    const group = L.geoJson(null, {
-        onEachFeature: onEachFeature
-    }).addTo(map)
+    ;['on', 'one', 'off', 'trigger'].forEach((api) =>
+        RiotControl[api] = (...args) =>
+            RiotControl._stores.forEach((el) => {
+                el[api].apply(null, args)
+            }
+        )
+    )
+    const API_URLS = {{ API_URLS|tojson }}
+    const territory = new Territory()
+    const mapnav = new MapNav()
+    RiotControl.addStore(territory)
+    RiotControl.addStore(mapnav)
+
     new L.PhotonBaseSearch(L.DomUtil.get('search-territory'), {
         url: `${API_URLS.GEOZONES}?`,
         placeholder: 'Chercher une commune, un département, une région',
@@ -63,7 +70,7 @@
     const views = {
 
         territoire: (args) => {
-            mount('territory', {args: args})
+            mount('territory', {args})
         },
 
         home: function () {
@@ -82,5 +89,7 @@
 
     riot.route.start()
     riot.route.exec()
+    // Mount me after the route are initalized. God knows why.
+    riot.mount('map-nav')
 </script>
 {% endblock content %}

@@ -3,8 +3,7 @@
     <div id="script" />
     <script type="text/javascript">
         this.on('mount', () => {
-            const inst = new Territory()
-            inst.trigger('init', opts.args.join('/'))
+            RiotControl.trigger('territory:init', opts.args.join('/'))
             let container = Z.qs('#territory')
             if (!container) return
             container.innerHTML = ''

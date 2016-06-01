@@ -6,6 +6,8 @@
         <title>{{ BASELINE }} - {{ SITE_NAME }}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <meta name="description" content="{{ DESCRIPTION }}">
+        <!-- Fake favicon, to avoid extra request to server -->
+        <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 
         <!-- Twitter Card data -->
         <meta name="twitter:card" content="summary">
@@ -32,6 +34,7 @@
         <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
         <script src="{{ url_for('static', filename='js/ban.js') }}"></script>
         <script src="{{ url_for('static', filename='js/territory.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/map-nav.js') }}"></script>
         {% block extrahead %}{% endblock %}
     </head>
     <body class="{% block body_class %}{% endblock %}">
@@ -46,7 +49,7 @@
             <hr />
             <div><a class="button" href="#" id="geolocate">Me localiser</a></div>
             <hr />
-            <div id="map"></div>
+            <map-nav></map-nav>
             <section class="menu">
                 <ul>
                   {% if not session.fullname %}
