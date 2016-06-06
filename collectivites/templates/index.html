@@ -40,7 +40,8 @@
         }
     });
 
-    L.DomEvent.on(Z.qs('#geolocate'), 'click', () => {
+    L.DomEvent.on(Z.qs('#geolocate'), 'click', (e) => {
+        L.DomEvent.stop(e)
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 fetch(`${API_URLS.GEOAPI}communes?lat=${position.coords.latitude}&lon=${position.coords.longitude}`)
