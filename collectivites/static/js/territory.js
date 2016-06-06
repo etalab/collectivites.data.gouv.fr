@@ -29,7 +29,7 @@ function Territory () {
             if (!geojson || !geojson.features.length) geojson = feature  // We received an empty geojson?
             RiotControl.trigger('territory:dataready', geojson)
         }
-        if (!children[feature.id]) {
+        if (!children[feature.id] && feature.properties.level !== 'fr/town') {
             fetch(`${API_URLS.UDATA}api/1/spatial/zone/${feature.id}/children`)
                 .then((response) => {
                     return response.json()

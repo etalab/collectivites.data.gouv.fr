@@ -38,7 +38,7 @@
         onSelected: (feature) => {
             riot.route(`/territoire/${feature.id}`)
         }
-    });
+    })
 
     L.DomEvent.on(Z.qs('#geolocate'), 'click', (e) => {
         L.DomEvent.stop(e)
