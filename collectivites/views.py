@@ -138,7 +138,7 @@ def shared_context():
         "SITE_URL": app.config['SITE_URL'],
         "BASELINE": "Le portail des territoires pour la modernisation",  # noqa
         "DESCRIPTION": "Portail des territoires pour la modernisation",
-        "TWITTER": "@SGMAP",
+        "TWITTER": "@sg_map",
         "API_URL": app.config['API_URL'],
         "CONTACT_EMAIL": "collectivites@data.gouv.fr",
         "API_URLS": {
