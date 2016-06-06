@@ -4,93 +4,71 @@
 
 {% block content %}
 <div class="row mwide twide">
-    <main class="col wide">
-        <ban></ban>
-        <territory></territory>
-    </main>
+  <main class="col wide">
+    <ban></ban>
+    <territory></territory>
+  </main>
 </div>
-<script type="riot/tag" src="{{ url_for('static', filename='tags/ban.js') }}"></script>
-<script type="riot/tag" src="{{ url_for('static', filename='tags/territory.js') }}"></script>
-<script type="riot/tag" src="{{ url_for('static', filename='tags/map-nav.js') }}"></script>
+<script type="riot/tag" src="{{ url_for('static', filename='tags/ban.tag') }}"></script>
+<script type="riot/tag" src="{{ url_for('static', filename='tags/territory.tag') }}"></script>
+<script type="riot/tag" src="{{ url_for('static', filename='tags/map-nav.tag') }}"></script>
+<script type="riot/tag" src="{{ url_for('static', filename='tags/side-nav.tag') }}"></script>
 <script>
-    const RiotControl = {
-      _stores: [],
-      addStore: function(store) {
-        this._stores.push(store)
-      }
+  const RiotControl = {
+    _stores: [],
+    addStore: function(store) {
+      this._stores.push(store)
     }
-    ;['on', 'one', 'off', 'trigger'].forEach((api) =>
-        RiotControl[api] = (...args) =>
-            RiotControl._stores.forEach((el) => {
-                el[api].apply(null, args)
-            }
-        )
+  }
+  ;['on', 'one', 'off', 'trigger'].forEach((api) =>
+    RiotControl[api] = (...args) =>
+    RiotControl._stores.forEach((el) => {
+      el[api].apply(null, args)
+    }
     )
-    const API_URLS = {{ API_URLS|tojson }}
-    const territory = new Territory()
-    const mapnav = new MapNav()
-    RiotControl.addStore(territory)
-    RiotControl.addStore(mapnav)
+    )
+  const API_URLS = {{ API_URLS|tojson }}
+  const territory = new Territory()
+  const mapnav = new MapNav()
+  RiotControl.addStore(territory)
+  RiotControl.addStore(mapnav)
 
-    new L.PhotonBaseSearch(L.DomUtil.get('search-territory'), {
-        url: `${API_URLS.GEOZONES}?`,
-        placeholder: 'Chercher une commune, un département, une région',
-        onSelected: (feature) => {
-            riot.route(`/territoire/${feature.id}`)
-        }
+  let currentTag = null
+
+  function mount(tag, options) {
+    currentTag && currentTag.unmount(true)
+    riot.compile(() => {
+      currentTag = riot.mount(tag, options)[0]
     })
+  }
 
-    L.DomEvent.on(Z.qs('#geolocate'), 'click', (e) => {
-        L.DomEvent.stop(e)
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                fetch(`${API_URLS.GEOAPI}communes?lat=${position.coords.latitude}&lon=${position.coords.longitude}`)
-                    .then((response) => {
-                        return response.json()
-                    }).then((json) => {
-                        const codeInsee = json[0].codeInsee
-                        const id = `fr/town/${codeInsee}`
-                        riot.route(`/territoire/${id}`)
-                    }).catch(console.error.bind(console))
-            },
-            (error) => {
-                console.log(error)
-            }
-        )
-    })
+  const views = {
 
-    let currentTag = null
+    territoire: (args) => {
+      mount('territory', {args})
+    },
 
-    function mount(tag, options) {
-        currentTag && currentTag.unmount(true)
-        riot.compile(() => {
-            currentTag = riot.mount(tag, options)[0]
-        })
+    home: function () {
+      riot.route('/territoire/country/fr')
+    },
+
+    ban: function (action) {
+      mount('ban')
     }
+  }
+  function handler(name, ...args) {
+    var fn = views[name || 'home']
+    fn ? fn(args) : console.error('no route found : ', name, args)
+  }
+  riot.route(handler)
 
-    const views = {
-
-        territoire: (args) => {
-            mount('territory', {args})
-        },
-
-        home: function () {
-            riot.route('/territoire/country/fr')
-        },
-
-        ban: function (action) {
-            mount('ban')
-        }
-    }
-    function handler(name, ...args) {
-      var fn = views[name || 'home']
-      fn ? fn(args) : console.error('no route found : ', name, args)
-    }
-    riot.route(handler)
-
-    riot.route.start()
-    riot.route.exec()
+  riot.route.start()
+  riot.route.exec()
     // Mount me after the route are initalized. God knows why.
-    riot.mount('map-nav')
-</script>
-{% endblock content %}
+    riot.mount('side-nav', {
+      logout_url: "{{ url_for('logout') }}",
+      login_url: "{{ url_for('login', provider='dgfr') }}?next={{ request.path }}",
+      fullname: "{{ session.fullname }}"
+    })
+  </script>
+  {% endblock content %}

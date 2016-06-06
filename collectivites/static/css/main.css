@@ -127,6 +127,7 @@
 /* ************************************************* */
 html, body {
   height: 100%;
+  width: 100%;
   padding: 0;
   margin: 0;
 }
@@ -138,7 +139,7 @@ textarea {
   font:15px/20px 'open_sansregular', sans-serif;
   -webkit-font-smoothing:antialiased;
 }
-div, ul, li, a, section, nav,
+div, ul, li, a, section, side-nav,
 h1, h2, h3, h4, h5, h6,
 hr, input, textarea, footer, header {
     -moz-box-sizing:border-box;
@@ -356,66 +357,14 @@ label.required:after {
 
 .container {
   height: 100%;
-  display: -ms-flexbox;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-box;
-  display: box;
-
-  -ms-flex-direction: row;
-  -webkit-box-orient: horizontal;
-  -moz-box-orient: horizontal;
-  -ms-box-orient: horizontal;
-  box-orient: horizontal;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
 }
 .main {
-    -ms-flex: 1;
-    -webkit-box-flex: 1;
-    -moz-box-flex: 1;
-    -ms-box-flex: 1;
-    box-flex: 1;
     padding: 10px;
 }
-nav {
-    background-image: url('../img/logo.jpg');
-    background-repeat: no-repeat;
-    background-position: top 10px center;
-    padding: 20px;
-    padding-top: 80px;
-    background-color: #fefefe;
-    border-right: 1px solid #ddd;
-    color: #333;
-    width: 400px;
-    -ms-flex: 0 100px;
-    -webkit-box-flex:  0;
-    -moz-box-flex:  0;
-    -ms-box-flex:  0;
-    box-flex:  0;
-}
-nav > div {
-    /*position: fixed;*/
-}
-nav a {
-    color: #333;
-    text-decoration: none;
-    font-family: 'open_sansbold';
-    font-weight: normal;
-}
-nav section {
-    align-self: center;
-    display: -webkit-flex;
-    display: flex;
-}
-nav a h1 {
-    font-size: 40px;
-    font-family: 'open_sanslight';
-    font-weight: normal;
-    height: 50px;
-    margin-bottom: 30px;
-}
-nav .menu a:hover {
-    text-decoration: underline;
-}
+
 
 /* ************************************************* */
 /* ******************* HELPERS ********************* */
@@ -424,10 +373,3 @@ nav .menu a:hover {
     display: none;
 }
 
-/* ************************************************* */
-/* ********************* MAP *********************** */
-/* ************************************************* */
-#map-nav {
-    width: 370px;
-    height: 400px;
-}

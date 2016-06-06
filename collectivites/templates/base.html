@@ -40,31 +40,7 @@
     <body class="{% block body_class %}{% endblock %}">
     {% block body %}
         <div class="container">
-          <!-- navigation bar -->
-          <nav>
-            <div>
-            <section><a href="#"><h1>Territoires</h1></a></section>
-            <h3>Chercher un territoire</h3>
-            <div><input type="search" placeholder="Trouver ma commune" id="search-territory" /></div>
-            <hr />
-            <div><a class="button" href="#" id="geolocate">Me localiser</a></div>
-            <hr />
-            <map-nav></map-nav>
-            <section class="menu">
-                <ul>
-                  {% if not session.fullname %}
-                    <li><a href="{{ url_for('login', provider='dgfr') }}?next={{ request.path }}">S'identifier</a></li>
-                  {% else %}
-                    <li>{{ session.fullname }} (<a href="{{ url_for('logout') }}">Se déconnecter</a>)</li>
-                    <li><a href="#ban/batch">Téléverser des adresses</a></li>
-                    <li><a href="{{ url_for('ban_groups') }}">Consulter les adresses d'une commune</a></li>
-                    <li><a href="{{ url_for('index') }}">Téléverser un PLU</a></li>
-                  {% endif %}
-                </ul>
-            </section>
-            </div>
-          </nav>
-
+          <side-nav></side-nav>
           <div class="main">
             {% block content %}{% endblock content %}
           </div>
