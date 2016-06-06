@@ -5,70 +5,24 @@
 {% block content %}
 <div class="row mwide twide">
   <main class="col wide">
-    <ban></ban>
-    <territory></territory>
+    <ban-upload></ban-upload>
+    <territory-list></territory-list>
   </main>
 </div>
-<script type="riot/tag" src="{{ url_for('static', filename='tags/ban.tag') }}"></script>
-<script type="riot/tag" src="{{ url_for('static', filename='tags/territory.tag') }}"></script>
-<script type="riot/tag" src="{{ url_for('static', filename='tags/map-nav.tag') }}"></script>
-<script type="riot/tag" src="{{ url_for('static', filename='tags/side-nav.tag') }}"></script>
+<script type="riot/tag" src="{{ url_for('static', filename='tags/ban-upload.tag.html') }}"></script>
+<script type="riot/tag" src="{{ url_for('static', filename='tags/territory-list.tag.html') }}"></script>
+<script type="riot/tag" src="{{ url_for('static', filename='tags/map-nav.tag.html') }}"></script>
+<script type="riot/tag" src="{{ url_for('static', filename='tags/side-nav.tag.html') }}"></script>
 <script>
-  const RiotControl = {
-    _stores: [],
-    addStore: function(store) {
-      this._stores.push(store)
-    }
-  }
-  ;['on', 'one', 'off', 'trigger'].forEach((api) =>
-    RiotControl[api] = (...args) =>
-    RiotControl._stores.forEach((el) => {
-      el[api].apply(null, args)
-    }
-    )
-    )
   const API_URLS = {{ API_URLS|tojson }}
-  const territory = new Territory()
-  const mapnav = new MapNav()
-  RiotControl.addStore(territory)
-  RiotControl.addStore(mapnav)
-
-  let currentTag = null
-
-  function mount(tag, options) {
-    currentTag && currentTag.unmount(true)
-    riot.compile(() => {
-      currentTag = riot.mount(tag, options)[0]
-    })
-  }
-
-  const views = {
-
-    territoire: (args) => {
-      mount('territory', {args})
-    },
-
-    home: function () {
-      riot.route('/territoire/country/fr')
-    },
-
-    ban: function (action) {
-      mount('ban')
-    }
-  }
-  function handler(name, ...args) {
-    var fn = views[name || 'home']
-    fn ? fn(args) : console.error('no route found : ', name, args)
-  }
-  riot.route(handler)
 
   riot.route.start()
   riot.route.exec()
-    // Mount me after the route are initalized. God knows why.
-    riot.mount('side-nav', {
-      logout_url: "{{ url_for('logout') }}",
-      login_url: "{{ url_for('login', provider='dgfr') }}?next={{ request.path }}",
-      fullname: "{{ session.fullname }}"
-    })
-  </script>
-  {% endblock content %}
+  // Mount me after the route are initalized. God knows why.
+  riot.mount('side-nav', {
+    logout_url: "{{ url_for('logout') }}",
+    login_url: "{{ url_for('login', provider='dgfr') }}?next={{ request.path }}",
+    fullname: "{{ session.fullname }}"
+  })
+</script>
+{% endblock content %}

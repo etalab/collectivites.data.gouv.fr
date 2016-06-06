@@ -1,0 +1,19 @@
+<territory-list>
+
+<div id="territory"></div>
+<div id="script"></div>
+
+<script>
+  this.on('mount', () => {
+    RiotControl.trigger('territory:init', opts.id)
+    let container = Z.qs('#territory')
+    if (!container) return
+    container.innerHTML = ''
+    container.dataset.udataTerritory = opts.id.replace(/\//g, '-')
+    let scriptContainer = Z.qs('#script')
+    scriptContainer.innerHTML = ''
+    const script = Z.el('script', {id: 'udata', src: `${API_URLS.UDATA}static/widgets.js`}, scriptContainer)
+  })
+</script>
+
+</territory-list>

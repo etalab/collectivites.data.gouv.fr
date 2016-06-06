@@ -1,0 +1,5 @@
+{
+  "standard": {
+    "globals": ["riot", "fetch", "L", "RiotControl", "API_URLS"]
+  }
+}

@@ -9,12 +9,12 @@
 <map-nav></map-nav>
 <section class="menu">
   <ul if={ opts.fullname }>
-    <li>{ opts.fullname } (<a href="{ logout_url }">Se déconnecter</a>)</li>
-    <li><a href="#ban/batch">Téléverser des adresses</a></li>
-    <li><a href="#ban/groups">Consulter les adresses d'une commune</a></li>
+    <li>{ opts.fullname } (<a href="{ opts.logout_url }">Se déconnecter</a>)</li>
+    <li><a href="#!ban/upload">Téléverser des adresses</a></li>
+    <li><a href="#!ban/groups">Consulter les adresses d'une commune</a></li>
   </ul>
   <ul if={ !opts.fullname }>
-    <li><a href="{ login_url }">S'identifier</a></li>
+    <li><a href="{ opts.login_url }">S'identifier</a></li>
   </ul>
 </section>
 
@@ -26,7 +26,7 @@
       url: `${API_URLS.GEOZONES}?`,
       placeholder: 'Chercher une commune, un département, une région',
       onSelected: (feature) => {
-        riot.route(`/territoire/${feature.id}`)
+        riot.route(`/territory/${feature.id}`)
       }
     })
 
@@ -35,18 +35,16 @@
       navigator.geolocation.getCurrentPosition(
         (position) => {
           fetch(`${API_URLS.GEOAPI}communes?lat=${position.coords.latitude}&lon=${position.coords.longitude}`)
-          .then((response) => {
-            return response.json()
-          }).then((json) => {
-            const codeInsee = json[0].codeInsee
-            const id = `fr/town/${codeInsee}`
-            riot.route(`/territoire/${id}`)
-          }).catch(console.error.bind(console))
+            .then((response) => response.json())
+            .then((json) => {
+              const codeInsee = json[0].codeInsee
+              const id = `fr/town/${codeInsee}`
+              riot.route(`/territory/${id}`)
+            })
+            .catch(console.error.bind(console))
         },
-        (error) => {
-          console.log(error)
-        }
-        )
+        (error) => console.error(error)
+      )
     })
   })
 
