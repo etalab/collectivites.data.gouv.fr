@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 
-{% block body_class %}home{% endblock %}
-
 {% block content %}
 <div class="row mwide twide">
   <main class="col wide">
@@ -9,10 +7,20 @@
     <territory-list></territory-list>
   </main>
 </div>
+<script src="{{ url_for('static', filename='node_modules/riot/riot+compiler.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/riotcontrol.js') }}"></script>
+<script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+<script src="{{ url_for('static', filename='js/ban.js') }}"></script>
+<script src="{{ url_for('static', filename='js/territory.js') }}"></script>
+<script src="{{ url_for('static', filename='js/views.js') }}"></script>
 <script type="riot/tag" src="{{ url_for('static', filename='tags/ban-upload.tag.html') }}"></script>
 <script type="riot/tag" src="{{ url_for('static', filename='tags/territory-list.tag.html') }}"></script>
-<script type="riot/tag" src="{{ url_for('static', filename='tags/map-nav.tag.html') }}"></script>
 <script type="riot/tag" src="{{ url_for('static', filename='tags/side-nav.tag.html') }}"></script>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='tags/map-nav/map-nav.css') }}">
+<script src="{{ url_for('static', filename='tags/map-nav/map-nav.js') }}"></script>
+<script type="riot/tag" src="{{ url_for('static', filename='tags/map-nav/map-nav.tag.html') }}"></script>
+
 <script>
   const API_URLS = {{ API_URLS|tojson }}
 

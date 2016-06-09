@@ -5,10 +5,15 @@
       "fetch",
       "L",
       "RiotControl",
-      "API_URLS"
+      "API_URLS",
+      "BAN",
+      "Z",
+      "opts"
     ]
   },
   "dependencies": {
+    "leaflet": "1.0.0-rc.1",
+    "leaflet.photon": "^0.7.2",
     "riot": "^2.4.1"
   }
 }

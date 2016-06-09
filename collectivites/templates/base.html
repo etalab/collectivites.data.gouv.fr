@@ -30,13 +30,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
         <script src="{{ url_for('static', filename='node_modules/leaflet/dist/leaflet-src.js') }}"></script>
         <script src="{{ url_for('static', filename='node_modules/leaflet.photon/leaflet.photon.js') }}"></script>
-        <script src="{{ url_for('static', filename='node_modules/riot/riot+compiler.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/riotcontrol.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/ban.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/territory.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/map-nav.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/views.js') }}"></script>
         {% block extrahead %}{% endblock %}
     </head>
     <body class="{% block body_class %}{% endblock %}">

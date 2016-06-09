@@ -1,0 +1,34 @@
+<h1>map-nav demos</h1>
+
+<demo aria-label="Display a map of the France">
+    <map-nav></map-nav>
+</demo>
+
+<link rel="stylesheet" href="/static/node_modules/leaflet/dist/leaflet.css">
+<link rel="stylesheet" href="/static/node_modules/leaflet.photon/leaflet.photon.css">
+
+<script src="/static/node_modules/leaflet/dist/leaflet-src.js"></script>
+<script src="/static/node_modules/leaflet.photon/leaflet.photon.js"></script>
+<script src="/static/node_modules/riot/riot+compiler.min.js"></script>
+<script src="/static/js/riotcontrol.js"></script>
+<script src="/static/js/utils.js"></script>
+
+
+<link rel="stylesheet" href="/static/tags/map-nav/map-nav.css">
+<script type="riot/tag" src="/static/tags/map-nav/map-nav.tag.html"></script>
+<script src="/static/tags/map-nav/map-nav.js"></script>
+<script>
+    riot.tag('demo', '<yield/>')
+    riot.mount('demo', {})
+</script>
+
+<style>
+    /* add a grey bar with the `aria-label` as demo title */
+    demo:before {
+        content: "Demo: " attr(aria-label);
+        display: block;
+        background: #F3F5F5;
+        padding: .5em;
+        clear: both;
+    }
+</style>

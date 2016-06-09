@@ -8,6 +8,9 @@ Prototype d'un portail dédié aux collectivités (et plus).
 - clone the project
 - create a virtualenv
 - `pip install -r requirements.txt`
+- add the current path to your PYTHON_PATH
+- go to collectivites/static/
+- run `npm install`
 
 ## Configuration
 
