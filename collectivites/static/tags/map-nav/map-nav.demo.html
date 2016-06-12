@@ -11,15 +11,13 @@
 <script src="/static/node_modules/leaflet.photon/leaflet.photon.js"></script>
 <script src="/static/node_modules/riot/riot+compiler.min.js"></script>
 <script src="/static/js/riotcontrol.js"></script>
-<script src="/static/js/utils.js"></script>
-
 
 <link rel="stylesheet" href="/static/tags/map-nav/map-nav.css">
 <script type="riot/tag" src="/static/tags/map-nav/map-nav.tag.html"></script>
 <script src="/static/tags/map-nav/map-nav.js"></script>
 <script>
-    riot.tag('demo', '<yield/>')
-    riot.mount('demo', {})
+  riot.tag('demo', '<yield/>')
+  riot.mount('demo', {})
 </script>
 
 <style>
@@ -32,3 +30,17 @@
         clear: both;
     }
 </style>
+
+<!-- Test directly within the demo/browser. -->
+<link rel="stylesheet" href="/static/tests/mocha.css">
+<script src="/static/tests/expect.js"></script>
+<script src="/static/tests/mocha.js"></script>
+<div id="mocha"></div>
+<script>
+  mocha.setup({ ui: 'bdd' })
+</script>
+<script src="/static/tags/map-nav/map-nav.tests.js"></script>
+<script>
+  mocha.checkLeaks()
+  mocha.run()
+</script>

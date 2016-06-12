@@ -8,7 +8,12 @@
       "API_URLS",
       "BAN",
       "Z",
-      "opts"
+      "opts",
+      // Tests.
+      "mocha",
+      "expect"
+      "describe",
+      "it"
     ]
   },
   "dependencies": {
