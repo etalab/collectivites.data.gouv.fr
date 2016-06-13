@@ -5,6 +5,7 @@
 
 <script>
   this.on('mount', () => {
+    RiotControl.trigger('territory:setBaseUrl', opts.udataBaseUrl)
     RiotControl.trigger('territory:init', opts.id)
     let container = Z.qs('#territory')
     if (!container) return

@@ -3,9 +3,11 @@
 {% block demo %}
 <h1>{{ tag_name }} demo</h1>
 
-<demo aria-label="Display a list of territories for Rennes">
-    <territory-list id="fr/town/35238" udata-base-url="{{ API_URLS.UDATA }}"></territory-list>
+<demo aria-label="Display the BAN upload form">
+    <ban-upload></ban-upload>
 </demo>
+
+<script src="{{ url_for('static', filename='tags/ban-upload/ban-upload.js') }}"></script>
 
 <script src="{{ url_for('static', filename='tags/' + tag_name + '/' + tag_name + '.tag.html') }}" type="riot/tag"></script>
 <script src="{{ url_for('static', filename='tags/' + tag_name + '/' + tag_name + '.js') }}"></script>
@@ -14,4 +16,5 @@
   riot.tag('demo', '<yield/>')
   riot.compile(() => riot.mount('demo', {}))
 </script>
+
 {% endblock demo %}

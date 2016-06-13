@@ -28,8 +28,11 @@ function MapNav () {
         layers.clearLayers()
         layers.addData(geojson)
       }
-      if (map._animatingZoom) map.once('zoomend', finish)
-      else finish()
+      if (map._animatingZoom) {
+        map.once('zoomend', finish)
+      } else {
+        finish()
+      }
     })
     RiotControl.on('territory:zoomto', (geojson) => {
       if (geojson.properties.level === 'country') {

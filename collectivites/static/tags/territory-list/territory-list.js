@@ -36,7 +36,9 @@ function Territory () {
   this.on('territory:zoomto', (feature) => {
     function finish (geojson) {
       if (_currentTerritory !== feature.id) return // Another territory has been loaded since then.
-      if (!geojson || !geojson.features.length) geojson = feature // We received an empty geojson?
+      if (!geojson || !geojson.features.length) {
+        geojson = feature // We received an empty geojson?
+      }
       RiotControl.trigger('territory:dataready', geojson)
     }
     if (_children[feature.id] || feature.properties.level === 'fr/town') {
