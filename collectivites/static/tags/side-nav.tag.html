@@ -6,7 +6,7 @@
 <hr />
 <div><a class="button" href="#" id="geolocate">Me localiser</a></div>
 <hr />
-<map-nav></map-nav>
+<map-nav udata-base-url={ opts.udataBaseUrl }></map-nav>
 <section class="menu">
   <ul if={ opts.fullname }>
     <li>{ opts.fullname } (<a href="{ opts.logout_url }">Se déconnecter</a>)</li>
@@ -22,7 +22,7 @@
   this.on('mount', () => {
     riot.mount('map-nav')
     new L.PhotonBaseSearch(L.DomUtil.get('search-territory'), {
-      url: `${API_URLS.GEOZONES}?`,
+      url: `${opts.geozonesBaseUrl}?`,
       placeholder: 'Chercher une commune, un département, une région',
       onSelected: (feature) => {
         riot.route(`/territory/${feature.id}`)
@@ -33,7 +33,7 @@
       L.DomEvent.stop(e)
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          fetch(`${API_URLS.GEOAPI}communes?lat=${position.coords.latitude}&lon=${position.coords.longitude}`)
+          fetch(`${opts.geoapiBaseUrl}communes?lat=${position.coords.latitude}&lon=${position.coords.longitude}`)
             .then((response) => response.json())
             .then((json) => {
               const codeInsee = json[0].codeInsee

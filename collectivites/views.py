@@ -1,7 +1,8 @@
 from functools import wraps
 
-from flask import (abort, redirect, render_template, request, session,
-                   url_for)
+from flask import (
+    abort, redirect, render_template, request, session, url_for
+)
 from flask.ext.oauthlib.client import OAuth
 import requests
 from werkzeug import security
@@ -11,7 +12,15 @@ from . import app
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('templates/index.html')
+
+
+@app.route('/demo/<tag_name>/')
+def demo(tag_name):
+    return render_template(
+        'tags/{tag_name}/{tag_name}.demo.html'.format(tag_name=tag_name), **{
+            'tag_name': tag_name
+        })
 
 
 def auth_required(func):
@@ -55,7 +64,7 @@ def ban_batch():
 
 @app.route('/ban/groups')
 def ban_groups():
-    return render_template('ban/groups.html')
+    return render_template('templates/ban/groups.html')
 
 
 # Oauth

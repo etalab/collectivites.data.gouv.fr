@@ -12,7 +12,11 @@
     container.dataset.udataTerritory = opts.id.replace(/\//g, '-')
     let scriptContainer = Z.qs('#script')
     scriptContainer.innerHTML = ''
-    Z.el('script', {id: 'udata', src: `${API_URLS.UDATA}static/widgets.js`}, scriptContainer)
+    Z.el('script', {
+      id: 'udata',
+      src: `${opts.udataBaseUrl}static/widgets.js`},
+      scriptContainer
+    )
   })
 </script>
 

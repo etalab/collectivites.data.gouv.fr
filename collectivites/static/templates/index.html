@@ -1,38 +1,37 @@
-{% extends 'base.html' %}
+{% extends 'templates/base.html' %}
 
 {% block content %}
 <div class="row mwide twide">
   <main class="col wide">
     <ban-upload></ban-upload>
-    <territory-list></territory-list>
+    <territory-list udata-base-url={{ API_URLS.UDATA }}></territory-list>
   </main>
 </div>
 <script src="{{ url_for('static', filename='node_modules/riot/riot+compiler.min.js') }}"></script>
-<!-- RiotControl must be included before tags. -->
+<!-- RiotControl must be included before everything else. -->
 <script src="{{ url_for('static', filename='js/riotcontrol.js') }}"></script>
 <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
 <script src="{{ url_for('static', filename='js/ban.js') }}"></script>
-<script src="{{ url_for('static', filename='js/territory.js') }}"></script>
 <script src="{{ url_for('static', filename='js/views.js') }}"></script>
 
 <script type="riot/tag" src="{{ url_for('static', filename='tags/ban-upload.tag.html') }}"></script>
-<script type="riot/tag" src="{{ url_for('static', filename='tags/territory-list.tag.html') }}"></script>
 <script type="riot/tag" src="{{ url_for('static', filename='tags/side-nav.tag.html') }}"></script>
+
+<script src="{{ url_for('static', filename='tags/territory-list/territory-list.js') }}"></script>
+<script type="riot/tag" src="{{ url_for('static', filename='tags/territory-list/territory-list.tag.html') }}"></script>
 
 <link rel="stylesheet" href="{{ url_for('static', filename='tags/map-nav/map-nav.css') }}">
 <script src="{{ url_for('static', filename='tags/map-nav/map-nav.js') }}"></script>
 <script type="riot/tag" src="{{ url_for('static', filename='tags/map-nav/map-nav.tag.html') }}"></script>
 
 <script>
-  const API_URLS = {{ API_URLS|tojson }}
-
   riot.route.start()
   riot.route.exec()
   // Mount me after the route are initalized. God knows why.
   riot.mount('side-nav', {
-    logout_url: "{{ url_for('logout') }}",
-    login_url: "{{ url_for('login', provider='dgfr') }}?next={{ request.path }}",
-    fullname: "{{ session.fullname }}"
+    logout_url: '{{ url_for("logout") }}',
+    login_url: '{{ url_for("login", provider="dgfr") }}?next={{ request.path }}',
+    fullname: '{{ session.fullname }}'
   })
 </script>
 {% endblock content %}

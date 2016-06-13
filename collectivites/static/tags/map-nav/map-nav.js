@@ -12,7 +12,9 @@ function MapNav () {
   }
   const layers = L.geoJson(null, {onEachFeature})
 
-  this.on('map:init', () => {
+  this.on('map:init', (udataApiUrl) => {
+    RiotControl.trigger('territory:setBaseUrl', udataApiUrl)
+
     const map = L.map('map-nav', {
       center: defaultCenter,
       zoom: defaultZoom,
@@ -30,8 +32,11 @@ function MapNav () {
       else finish()
     })
     RiotControl.on('territory:zoomto', (geojson) => {
-      if (geojson.properties.level === 'country') map.setView(defaultCenter, defaultZoom)
-      else map.flyToBounds(L.geoJson(geojson).getBounds())
+      if (geojson.properties.level === 'country') {
+        map.setView(defaultCenter, defaultZoom)
+      } else {
+        map.flyToBounds(L.geoJson(geojson).getBounds())
+      }
     })
   })
 }

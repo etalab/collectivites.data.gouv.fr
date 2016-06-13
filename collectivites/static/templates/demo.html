@@ -1,0 +1,41 @@
+{% extends 'templates/base.html' %}
+
+{% block content %}
+
+<script src="{{ url_for('static', filename='node_modules/riot/riot+compiler.min.js') }}"></script>
+<!-- RiotControl must be included before everything else. -->
+<script src="{{ url_for('static', filename='js/riotcontrol.js') }}"></script>
+<script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+<script src="{{ url_for('static', filename='js/ban.js') }}"></script>
+<script src="{{ url_for('static', filename='js/views.js') }}"></script>
+
+
+{% block demo %}{% endblock demo %}
+
+
+<style>
+    /* add a grey bar with the `aria-label` as demo title */
+    demo:before {
+        content: "Demo: " attr(aria-label);
+        display: block;
+        background: #F3F5F5;
+        padding: .5em;
+        clear: both;
+    }
+</style>
+
+<!-- Test directly within the demo/browser. -->
+<link rel="stylesheet" href="{{ url_for('static', filename='node_modules/mocha/mocha.css') }}">
+<script src="{{ url_for('static', filename='node_modules/expect/umd/expect.js') }}"></script>
+<script src="{{ url_for('static', filename='node_modules/mocha/mocha.js') }}"></script>
+<div id="mocha"></div>
+<script>
+  mocha.setup({ ui: 'bdd' })
+</script>
+<script src="{{ url_for('static', filename='tags/' + tag_name + '/' + tag_name + '.tests.js') }}"></script>
+<script>
+  mocha.checkLeaks()
+  mocha.run()
+</script>
+
+{% endblock content %}

@@ -4,6 +4,11 @@ function Territory () {
   let _children = {}
   let _territories = {}
   let _currentTerritory = null
+  let _baseUrl = null
+
+  this.on('territory:setBaseUrl', (baseUrl) => {
+    _baseUrl = baseUrl
+  })
 
   this.on('territory:init', (id) => {
     _currentTerritory = id
@@ -11,7 +16,7 @@ function Territory () {
       this.trigger('territory:zoomto', _territories[id])
       return
     }
-    fetch(`${API_URLS.UDATA}api/1/spatial/zone/${id}`)
+    fetch(`${_baseUrl}api/1/spatial/zone/${id}`)
       .then((response) => response.json())
       .then((feature) => {
         _territories[feature.id] = feature
@@ -38,7 +43,7 @@ function Territory () {
       finish(_children[feature.id])
       return
     }
-    fetch(`${API_URLS.UDATA}api/1/spatial/zone/${feature.id}/children`)
+    fetch(`${_baseUrl}api/1/spatial/zone/${feature.id}/children`)
       .then((response) => response.json())
       .then((json) => {
         _children[feature.id] = json
