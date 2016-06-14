@@ -10,5 +10,5 @@ The side nav tag displays the whole side navigation bar including the search, ge
 
 | attribute | type | description
 | --------- | ---- | -----------
-| `udata-base-url` | URL | The base URL to retrieve data from udata (geozones, datasets).
-| `fullname` | String | The full name of the current user to display login/logout options.
+| `geoapi-base-url` | URL | The base URL to retrieve data from geoapi (geolocation).
+| `geozones-base-url` | URL | The base URL to retrieve data from geozones (addok).

@@ -5,7 +5,7 @@ describe('Map-nav tag', () => {
     expect(tag.classList[0]).toBe('leaflet-container')
   })
   it('checks the 27 regions are loaded', () => {
-    RiotControl.on('territory:dataready', (geojson) =>
+    RiotControl.on('territory.dataready', (geojson) =>
       expect(geojson.features.length).toBe(27))
   })
 })

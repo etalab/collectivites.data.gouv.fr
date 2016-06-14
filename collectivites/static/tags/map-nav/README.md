@@ -7,8 +7,4 @@ Once initialized, the map is centered on France and metropolitan regions are dis
 
 ## Usage
 
-`<map-nav>` requires the following custom tag attribute:
-
-| attribute | type | description
-| --------- | ---- | -----------
-| `udata-base-url` | URL | The base URL to retrieve data from udata (geozones, datasets).
+`<map-nav>` doesn't require any tag attribute.

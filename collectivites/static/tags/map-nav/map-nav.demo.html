@@ -4,7 +4,7 @@
 <h1>{{ tag_name }} demo</h1>
 
 <demo aria-label="Display a map of the France">
-    <map-nav udata-base-url={{ API_URLS.UDATA }}></map-nav>
+    <map-nav></map-nav>
 </demo>
 
 <script src="{{ url_for('static', filename='tags/territory-list/territory-list.js') }}"></script>
@@ -17,7 +17,10 @@
   riot.tag('demo', '<yield/>')
   riot.compile(() => {
     riot.mount('demo', {})
-    RiotControl.trigger('territory:init', 'country/fr')
+    RiotControl.trigger('territory.init', '{{ API_URLS.UDATA }}')
+    Territory.getOrCreate('country/fr').then((territory) => {
+      RiotControl.trigger('territory.zoomto', territory)
+    })
   })
 </script>
 

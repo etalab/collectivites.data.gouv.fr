@@ -1,12 +1,23 @@
 <territory-list>
 
+<header>
+  <h1>{ territory.geojson.properties.name } <span if="{ territory.parent !== territory }">(<a onclick="{ goToParent }" href="">{ territory.parent.geojson.properties.name }</a>)</span></h1>
+  <img if="{ territory.geojson.properties.logo }" src="{ territory.geojson.properties.logo }" width="150px" height="150px" />
+</header>
 <div id="territory"></div>
 <div id="script"></div>
 
 <script>
-  this.on('mount', () => {
-    RiotControl.trigger('territory:setBaseUrl', opts.udataBaseUrl)
-    RiotControl.trigger('territory:init', opts.id)
+  const tag = this
+
+  tag.on('mount', () => {
+    RiotControl.trigger('territory.init', opts.udataBaseUrl)
+    Territory.getOrCreate(opts.id).then((territory) => {
+      territory.display()
+      tag.territory = territory
+      tag.update()
+      RiotControl.on('territory.updated', () => tag.update())
+    })
     let container = Z.qs('#territory')
     if (!container) return
     container.innerHTML = ''
@@ -19,6 +30,16 @@
       scriptContainer
     )
   })
+
+  tag.goToParent = goToParent
+
+  function goToParent (event) {
+    if (this.territory.parent._id === 'country/fr') {
+      riot.route('/')
+    } else {
+      riot.route(`/territory/${tag.territory.parent._id}`)
+    }
+  }
 </script>
 
 </territory-list>

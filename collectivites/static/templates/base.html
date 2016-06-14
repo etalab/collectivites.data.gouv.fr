@@ -35,9 +35,8 @@
     <body class="{% block body_class %}{% endblock %}">
     {% block body %}
         <div class="container">
-          <side-nav 
-            udata-base-url={{ API_URLS.UDATA }} 
-            geozones-base-url={{ API_URLS.GEOZONES }} 
+          <side-nav
+            geozones-base-url={{ API_URLS.GEOZONES }}
             geoapi-base-url={{ API_URLS.GEOAPI }}></side-nav>
           <div class="main">
             {% block content %}{% endblock content %}
