@@ -4,9 +4,9 @@ const RiotControl = {
     this._stores.push(store)
   }
 }
-;['on', 'one', 'off', 'trigger'].forEach((api) =>
+;['on', 'one', 'off', 'trigger'].forEach((api) => {
   RiotControl[api] = (...args) =>
     RiotControl._stores.forEach((el) =>
-      el[api].apply(null, args)
+      el[api](...args)
     )
-  )
+})
