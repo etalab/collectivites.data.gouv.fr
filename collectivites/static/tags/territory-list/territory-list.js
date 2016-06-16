@@ -45,6 +45,7 @@ class Territory {
       return Promise.resolve(territoryList._territories[this._id])
     }
     return fetch(`${territoryList._baseUrl}api/1/spatial/zone/${this._id}`)
+      .then(Z.checkStatus)
       .then((response) => response.json())
       .then((geojson) => {
         this.geojson = geojson
@@ -60,6 +61,7 @@ class Territory {
       return
     }
     fetch(`${territoryList._baseUrl}api/1/spatial/zone/${this._id}/children`)
+      .then(Z.checkStatus)
       .then((response) => response.json())
       .then((json) => {
         this._children = json
@@ -75,10 +77,12 @@ class Territory {
     let parentId = parents.filter((parent) => parent.search('county') >= 0)
     parentId = parentId.length ? parentId : parents.filter((parent) => parent.search('region') >= 0)
     parentId = parentId.length ? parentId : 'country/fr'
-    Territory.getOrCreate(parentId).then((parent) => {
-      this.parent = parent
-      RiotControl.trigger('territory.updated', this)
-    })
+    Territory.getOrCreate(parentId)
+      .then((parent) => {
+        this.parent = parent
+        RiotControl.trigger('territory.updated', this)
+      })
+      .catch(console.error.bind(console))
   }
 
   display () {

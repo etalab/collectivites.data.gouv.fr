@@ -18,9 +18,14 @@
   riot.compile(() => {
     riot.mount('demo', {})
     RiotControl.trigger('territory.init', '{{ API_URLS.UDATA }}')
-    Territory.getOrCreate('country/fr').then((territory) => {
-      RiotControl.trigger('territory.zoomto', territory)
-    })
+    Territory.getOrCreate('country/fr')
+      .then((territory) => {
+        RiotControl.trigger('territory.zoomto', territory)
+      })
+      .catch((error) => {
+        console.error('{{ API_URLS.UDATA }} is not available at the moment.')
+        console.error(error)
+      })
   })
 </script>
 

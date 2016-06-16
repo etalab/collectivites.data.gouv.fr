@@ -34,6 +34,7 @@
       navigator.geolocation.getCurrentPosition(
         (position) => {
           fetch(`${opts.geoapiBaseUrl}communes?lat=${position.coords.latitude}&lon=${position.coords.longitude}`)
+            .then(Z.checkStatus)
             .then((response) => response.json())
             .then((json) => {
               const codeInsee = json[0].codeInsee

@@ -12,12 +12,27 @@
 
   tag.on('mount', () => {
     RiotControl.trigger('territory.init', opts.udataBaseUrl)
-    Territory.getOrCreate(opts.id).then((territory) => {
-      territory.display()
-      tag.territory = territory
-      tag.update()
-      RiotControl.on('territory.updated', () => tag.update())
-    })
+    Territory.getOrCreate(opts.id)
+      .then((territory) => {
+        territory.display()
+        tag.territory = territory
+        tag.update()
+        RiotControl.on('territory.updated', () => tag.update())
+      })
+      .catch((error) => {
+        console.error(`${opts.udataBaseUrl} is not available at the moment.`)
+        console.error(error)
+        // TODO: find a more generic way to do that.
+        // Fake territory to display an error.
+        tag.territory = {
+          geojson: {
+            properties: {
+              name: `Erreur de chargement depuis ${opts.udataBaseUrl} pour ${opts.id}`
+            }
+          }
+        }
+        tag.update()
+      })
     let container = Z.qs('#territory')
     if (!container) return
     container.innerHTML = ''
