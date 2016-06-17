@@ -7,6 +7,7 @@
     <territory-list udata-base-url={{ API_URLS.UDATA }}></territory-list>
   </main>
 </div>
+<script src="{{ API_URLS.UDATA }}static/widgets.js" id="udata"></script>
 <script src="{{ url_for('static', filename='node_modules/riot/riot+compiler.min.js') }}"></script>
 <!-- RiotControl must be included before everything else. -->
 <script src="{{ url_for('static', filename='js/riotcontrol.js') }}"></script>

@@ -37,13 +37,7 @@
     if (!container) return
     container.innerHTML = ''
     container.dataset.udataTerritory = opts.id.replace(/\//g, '-')
-    let scriptContainer = Z.qs('#script')
-    scriptContainer.innerHTML = ''
-    Z.el('script', {
-      id: 'udata',
-      src: `${opts.udataBaseUrl}static/widgets.js`},
-      scriptContainer
-    )
+    udataScript.loadTerritory({withSearch: true})
   })
 
   tag.goToParent = goToParent

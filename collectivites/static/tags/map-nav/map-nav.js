@@ -3,7 +3,7 @@ function MapNav () {
 
   const defaultZoom = 5
   const defaultCenter = [47, 2]
-  const tilelayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png')
+  const tilelayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png')
   const onEachFeature = (feature, layer) => {
     layer.on('click', () => {
       const territory = Territory.fromGeoJSON(feature)
