@@ -37,7 +37,7 @@
     if (!container) return
     container.innerHTML = ''
     container.dataset.udataTerritory = opts.id.replace(/\//g, '-')
-    udataScript.loadTerritory(100, true)
+    udataScript.loadTerritory({size: 100, withSearch: true})
   })
 
   tag.goToParent = goToParent
