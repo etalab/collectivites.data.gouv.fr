@@ -37,8 +37,8 @@
             .then(Z.checkStatus)
             .then((response) => response.json())
             .then((json) => {
-              const codeInsee = json[0].codeInsee
-              const id = `fr/town/${codeInsee}`
+              const code = json[0].code
+              const id = `fr/town/${code}`
               riot.route(`/territory/${id}`)
             })
             .catch(console.error.bind(console))
