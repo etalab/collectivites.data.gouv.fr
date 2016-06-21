@@ -1,0 +1,32 @@
+{% extends 'templates/demo.html' %}
+
+{% block demo %}
+<h1>{{ tag_name }} demo</h1>
+
+<demo aria-label="Display a map of the France">
+    <map-nav></map-nav>
+</demo>
+
+<script src="{{ url_for('static', filename='tags/territory-list/territory-list.js') }}"></script>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='tags/' + tag_name + '/' + tag_name + '.css') }}">
+<script src="{{ url_for('static', filename='tags/' + tag_name + '/' + tag_name + '.tag.html') }}" type="riot/tag"></script>
+<script src="{{ url_for('static', filename='tags/' + tag_name + '/' + tag_name + '.js') }}"></script>
+
+<script>
+  riot.tag('demo', '<yield/>')
+  riot.compile(() => {
+    riot.mount('demo', {})
+    RiotControl.trigger('territory.init', '{{ API_URLS.UDATA }}')
+    Territory.getOrCreate('country/fr')
+      .then((territory) => {
+        RiotControl.trigger('territory.zoomto', territory)
+      })
+      .catch((error) => {
+        console.error('{{ API_URLS.UDATA }} is not available at the moment.')
+        console.error(error)
+      })
+  })
+</script>
+
+{% endblock demo %}

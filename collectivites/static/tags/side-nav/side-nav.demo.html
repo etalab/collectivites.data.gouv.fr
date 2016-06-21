@@ -1,0 +1,24 @@
+{% extends 'templates/demo.html' %}
+
+{% block demo %}
+<h1>{{ tag_name }} demo</h1>
+
+<demo aria-label="Display a side nav containing other tags">
+    <side-nav udata-base-url={{ API_URLS.UDATA }}></side-nav>
+</demo>
+
+<!-- Requires map-nav to be complete. -->
+<link rel="stylesheet" href="{{ url_for('static', filename='tags/map-nav/map-nav.css') }}">
+<script src="{{ url_for('static', filename='tags/map-nav/map-nav.tag.html') }}" type="riot/tag"></script>
+<script src="{{ url_for('static', filename='tags/map-nav/map-nav.js') }}"></script>
+
+
+<link rel="stylesheet" href="{{ url_for('static', filename='tags/' + tag_name + '/' + tag_name + '.css') }}">
+<script src="{{ url_for('static', filename='tags/' + tag_name + '/' + tag_name + '.tag.html') }}" type="riot/tag"></script>
+
+<script>
+  riot.tag('demo', '<yield/>')
+  riot.compile(() => riot.mount('demo', {}))
+</script>
+
+{% endblock demo %}

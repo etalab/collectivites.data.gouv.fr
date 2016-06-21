@@ -1,7 +1,8 @@
 from functools import wraps
 
-from flask import (abort, redirect, render_template, request, session,
-                   url_for)
+from flask import (
+    abort, redirect, render_template, request, session, url_for
+)
 from flask.ext.oauthlib.client import OAuth
 import requests
 from werkzeug import security
@@ -11,7 +12,15 @@ from . import app
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('templates/index.html')
+
+
+@app.route('/demo/<tag_name>/')
+def demo(tag_name):
+    return render_template(
+        'tags/{tag_name}/{tag_name}.demo.html'.format(tag_name=tag_name), **{
+            'tag_name': tag_name
+        })
 
 
 def auth_required(func):
@@ -40,24 +49,22 @@ def with_ban_session(func):
     return wrapper
 
 
-@app.route('/ban/batch/', methods=['GET', 'POST'])
+@app.route('/ban/batch/', methods=['POST'])
 @auth_required
 @with_ban_session
 def ban_batch():
-    if request.method == 'POST':
-        token = session.get('ban_token')
-        auth = "Bearer {}".format(token)
-        url = '{base_url}/import/bal'.format(base_url=app.config['BAN_URL'])
-        resp = requests.post(url,
-                             headers={'Authorization': auth},
-                             files={'data': ('f.csv', request.files['data'])})
-        return resp.text
-    return render_template('ban/batch.html')
+    token = session.get('ban_token')
+    auth = "Bearer {}".format(token)
+    url = '{base_url}/import/bal'.format(base_url=app.config['BAN_URL'])
+    resp = requests.post(url,
+                         headers={'Authorization': auth},
+                         files={'data': ('f.csv', request.files['data'])})
+    return resp.text
 
 
 @app.route('/ban/groups')
 def ban_groups():
-    return render_template('ban/groups.html')
+    return render_template('templates/ban/groups.html')
 
 
 # Oauth
@@ -140,7 +147,12 @@ def shared_context():
         "SITE_URL": app.config['SITE_URL'],
         "BASELINE": "Le portail des territoires pour la modernisation",  # noqa
         "DESCRIPTION": "Portail des territoires pour la modernisation",
-        "TWITTER": "@SGMAP",
+        "TWITTER": "@sg_map",
         "API_URL": app.config['API_URL'],
-        "CONTACT_EMAIL": "collectivites@data.gouv.fr"
+        "CONTACT_EMAIL": "collectivites@data.gouv.fr",
+        "API_URLS": {
+            "UDATA": app.config['UDATA_URL'],
+            "GEOZONES": app.config['GEOZONES_URL'],
+            "GEOAPI": app.config['GEOAPI_URL'],
+        }
     }

@@ -6,6 +6,8 @@
         <title>{{ BASELINE }} - {{ SITE_NAME }}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <meta name="description" content="{{ DESCRIPTION }}">
+        <!-- Fake favicon, to avoid extra request to server -->
+        <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 
         <!-- Twitter Card data -->
         <meta name="twitter:card" content="summary">
@@ -23,53 +25,24 @@
         <meta property="og:SITE_NAME" content="{{ SITE_NAME }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/uploader.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='node_modules/leaflet/dist/leaflet.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='node_modules/leaflet.photon/leaflet.photon.css') }}">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
-        <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/ban.js') }}"></script>
+        <script src="{{ url_for('static', filename='node_modules/leaflet/dist/leaflet-src.js') }}"></script>
+        <script src="{{ url_for('static', filename='node_modules/leaflet.photon/leaflet.photon.js') }}"></script>
         {% block extrahead %}{% endblock %}
     </head>
     <body class="{% block body_class %}{% endblock %}">
     {% block body %}
         <div class="container">
-          <!-- navigation bar -->
-          <nav>
-            <div>
-            <section><a href="{{ url_for('index') }}"><h1>Territoires</h1></a></section>
-            <section class="menu">
-                <ul>
-                  {% if not session.fullname %}
-                    <li><a href="{{ url_for('login', provider='dgfr') }}?next={{ request.path }}">S'identifier</a></li>
-                  {% else %}
-                    <li>{{ session.fullname }} (<a href="{{ url_for('logout') }}">Se déconnecter</a>)</li>
-                    <li><a href="{{ url_for('ban_batch') }}">Téléverser des adresses</a></li>
-                    <li><a href="{{ url_for('ban_groups') }}">Consulter les adresses d'une commune</a></li>
-                    <li><a href="{{ url_for('index') }}">Téléverser un PLU</a></li>
-                  {% endif %}
-                </ul>
-            </section>
-            </div>
-          </nav>
-
+          <side-nav
+            geozones-base-url={{ API_URLS.GEOZONES }}
+            geoapi-base-url={{ API_URLS.GEOAPI }}></side-nav>
           <div class="main">
             {% block content %}{% endblock content %}
           </div>
 
         </div>
     {% endblock body %}
-        <!-- Piwik -->
-        <script type="text/javascript">
-          var _paq = _paq || [];
-          _paq.push(['trackPageView']);
-          _paq.push(['enableLinkTracking']);
-          (function() {
-            var u="//stats.data.gouv.fr/";
-            _paq.push(['setTrackerUrl', u+'piwik.php']);
-            _paq.push(['setSiteId', 13]);
-            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-            g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-          })();
-        </script>
-        <noscript><p><img src="//stats.data.gouv.fr/piwik.php?idsite=13" style="border:0;" alt="" /></p></noscript>
-        <!-- End Piwik Code -->
     </body>
 </html>

@@ -1,6 +1,6 @@
 from flask import Flask
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='static')
 app.config.from_object('collectivites.default')
 app.config.from_envvar('COLLECTIVITES_SETTINGS', silent=True)
 

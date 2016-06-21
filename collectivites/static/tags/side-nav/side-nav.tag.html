@@ -1,0 +1,52 @@
+<side-nav>
+
+<section><a href="#"><h1>Territoires</h1></a></section>
+<h3>Chercher un territoire</h3>
+<div><input type="search" placeholder="Trouver ma commune" id="search-territory" /></div>
+<hr />
+<div><a class="button" href="#" id="geolocate">Me localiser</a></div>
+<hr />
+<map-nav udata-base-url={ opts.udataBaseUrl }></map-nav>
+<section class="menu">
+  <ul if={ opts.fullname }>
+    <li>{ opts.fullname } (<a href="{ opts.logout_url }">Se déconnecter</a>)</li>
+    <li><a href="#!ban/upload">Téléverser des adresses</a></li>
+    <li><a href="#!ban/groups">Consulter les adresses d'une commune</a></li>
+  </ul>
+  <ul if={ !opts.fullname }>
+    <li><a href="{ opts.login_url }">S'identifier</a></li>
+  </ul>
+</section>
+
+<script>
+  this.on('mount', () => {
+    riot.mount('map-nav')
+    new L.PhotonBaseSearch(L.DomUtil.get('search-territory'), {
+      url: `${opts.geozonesBaseUrl}?`,
+      placeholder: 'Chercher une commune, un département, une région',
+      onSelected: (feature) => {
+        riot.route(`/territory/${feature.id}`)
+      }
+    })
+
+    L.DomEvent.on(Z.qs('#geolocate'), 'click', (e) => {
+      L.DomEvent.stop(e)
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          fetch(`${opts.geoapiBaseUrl}communes?lat=${position.coords.latitude}&lon=${position.coords.longitude}`)
+            .then(Z.checkStatus)
+            .then((response) => response.json())
+            .then((json) => {
+              const code = json[0].code
+              const id = `fr/town/${code}`
+              riot.route(`/territory/${id}`)
+            })
+            .catch(console.error.bind(console))
+        },
+        (error) => console.error(error)
+      )
+    })
+  })
+</script>
+
+</side-nav>

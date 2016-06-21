@@ -1,0 +1,28 @@
+{
+  "standard": {
+    "globals": [
+      "riot",
+      "fetch",
+      "L",
+      "RiotControl",
+      "Territory",
+      "BAN",
+      "Z",
+      "udataScript",
+      "opts",
+      "mocha",
+      "expect",
+      "describe",
+      "it"
+    ]
+  },
+  "dependencies": {
+    "leaflet": "1.0.0-rc.1",
+    "leaflet.photon": "^0.7.2",
+    "riot": "^2.4.1"
+  },
+  "devDependencies": {
+    "expect": "^1.20.1",
+    "mocha": "^2.5.3"
+  }
+}

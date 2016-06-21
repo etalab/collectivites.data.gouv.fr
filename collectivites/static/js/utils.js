@@ -24,6 +24,7 @@ var Z = {
     },
 
     stop: function (e) {
+        if (!e) return;
         e.stopPropagation();
         e.preventDefault();
     },
@@ -75,6 +76,16 @@ var Z = {
         options = options || {};
         options.verb = 'GET';
         Z.xhr(options);
+    },
+
+    checkStatus: function checkStatus (response) {
+      if (response.status >= 200 && response.status < 300) {
+        return response
+      } else {
+        const error = new Error(response.statusText)
+        error.response = response
+        throw error
+      }
     }
 
 };
@@ -167,7 +178,7 @@ Z.fileUploader = function (options) {
             fileInput.click();
         };
         browseLink.addEventListener('click', onBrowseLinkClick, false);
-    }; 
+    };
     listenBrowseLink();
     reader.addEventListener('load', onFileLoad, false);
     holder.addEventListener('dragenter', onDragEnter, false);
